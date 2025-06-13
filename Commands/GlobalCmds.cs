@@ -11,7 +11,7 @@ namespace Cliptok.Commands
         [Command("helptextcmd"), Description("Displays command help.")]
         [TextAlias("help")]
         [AllowedProcessors(typeof(TextCommandProcessor))]
-        public async Task Help(CommandContext ctx, [Description("Command to provide help for."), RemainingText] string command = "")
+        public static async Task Help(CommandContext ctx, [Description("Command to provide help for."), RemainingText] string command = "")
         {
             var commandSplit = command.Split(' ');
 
@@ -43,7 +43,7 @@ namespace Cliptok.Commands
                     StringComparer comparer = StringComparer.InvariantCultureIgnoreCase;
                     cmd = searchIn.FirstOrDefault(xc => xc.Name.Equals(commandSplit[i], comparison) || xc.Name.Equals(commandSplit[i].Replace("textcmd", ""), comparison) || ((xc.Attributes.FirstOrDefault(x => x is TextAliasAttribute) as TextAliasAttribute)?.Aliases.Contains(commandSplit[i].Replace("textcmd", ""), comparer) ?? false));
 
-                    if (cmd is null)
+                    if (cmd is null)    
                     {
                         break;
                     }
@@ -318,7 +318,7 @@ namespace Cliptok.Commands
         // Runs command context checks manually. Returns a list of failed checks.
         // Unfortunately DSharpPlus.Commands does not provide a way to execute a command's context checks manually,
         // so this will have to do. This may not include all checks, but it includes everything I could think of. -Milkshake
-        private async Task<IEnumerable<ContextCheckAttribute>> CheckPermissionsAsync(CommandContext ctx, Command cmd)
+        private static async Task<IEnumerable<ContextCheckAttribute>> CheckPermissionsAsync(CommandContext ctx, Command cmd)
         {
             var contextChecks = cmd.Attributes.Where(x => x is ContextCheckAttribute);
             var failedChecks = new List<ContextCheckAttribute>();

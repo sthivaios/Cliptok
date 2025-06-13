@@ -1,4 +1,5 @@
-﻿using static Cliptok.Program;
+﻿using Cliptok.Commands;
+using static Cliptok.Program;
 
 namespace Cliptok.Events
 {
@@ -97,19 +98,20 @@ namespace Cliptok.Events
                     return;
                 }
 
-                var embed = new DiscordEmbedBuilder
-                {
-                    Color = new DiscordColor("#FF0000"),
-                    Title = "An exception occurred when executing a command",
-                    Description = $"{cfgjson.Emoji.BSOD} `{e.Exception.GetType()}` occurred when executing `{commandName}`.",
-                    Timestamp = DateTime.UtcNow
-                };
-                embed.WithFooter(discord.CurrentUser.Username, discord.CurrentUser.AvatarUrl)
-                    .AddField("Message", ex.Message.Replace("textcmd", ""));
-                if (e.Exception is System.ArgumentException or DSharpPlus.Commands.Exceptions.ArgumentParseException)
-                    embed.AddField("Note", "This usually means that you used the command incorrectly.\n" +
-                        "Please double-check how to use this command.");
-                await e.Context.RespondAsync(embed: embed.Build()).ConfigureAwait(false);
+                // var embed = new DiscordEmbedBuilder
+                // {
+                //     Color = new DiscordColor("#FF0000"),
+                //     Title = "An exception occurred when executing a command",
+                //     Description = $"{cfgjson.Emoji.BSOD} `{e.Exception.GetType()}` occurred when executing `{commandName}`.",
+                //     Timestamp = DateTime.UtcNow
+                // };
+                // embed.WithFooter(discord.CurrentUser.Username, discord.CurrentUser.AvatarUrl)
+                //     .AddField("Message", ex.Message.Replace("textcmd", ""));
+                // if (e.Exception is System.ArgumentException or DSharpPlus.Commands.Exceptions.ArgumentParseException)
+                //     embed.AddField("Note", "This usually means that you used the command incorrectly.\n" +
+                //         "Please double-check how to use this command.");
+                // await e.Context.RespondAsync(embed: embed.Build()).ConfigureAwait(false);
+                GlobalCmds.Help(e.Context, commandName);
             }
         }
     }
